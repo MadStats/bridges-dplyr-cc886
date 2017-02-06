@@ -1,0 +1,132 @@
+---
+title: "Bridge Data Explaratory"
+author: "Yanshi Luo"
+date: "2/5/2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#### Name: Yanshi Luo
+#### Email: yluo82@wisc.edu
+
+---
+
+## The Total Average Daily Traffic of the bridges in each state & The number of the bridges of each state
+
+For the item recorded, we can see the `NBI Record Format` page.
+[NBI Record Format](https://www.fhwa.dot.gov/bridge/nbi/format.cfm)
+
+```{r}
+# Questions:
+# For the bridges data, what variables are you interested in? 
+# Select, filter, and plot. Do something different from my code! 
+# Make several plots. Save several pdfs and push to github.
+
+library(ggplot2)
+library(dplyr)
+
+# I store the variable `M` in `downloadBridges.R` into 
+# `tidyBridge.Rdata` file and load it here
+load(file = "data/tidyBridge.RData")
+```
+
+The columns that I may interested in:
+* 6	Latitude
+* 17	Longitude
+* 27	Year Built
+* 29	Average Daily Traffic
+* 30	Year Of Average Daily Traffic
+
+Using `grep()` to search the column name and use `select` to pick them up.
+
+```{r}
+colnames(M)[grep("006|017|027|029|030", colnames(M))]
+
+# Get the data
+M %>% select(STATE_CODE_001, COUNTY_CODE_003, LAT_016, LONG_017, ADT_029) %>%
+  mutate(code = STATE_CODE_001*1000+COUNTY_CODE_003) -> D1
+D1%>% group_by(STATE_CODE_001) %>% dplyr::summarise(count = n(), totalADT = sum(ADT_029))-> d
+
+# install.packages("tidyr")
+# library(tidyr)
+# d %>% gather(amount, value, -STATE_CODE_001)
+
+
+library(ggplot2)
+
+# The totalADT of the bridges in each state.
+ggplot(d, aes(x=STATE_CODE_001)) + 
+  geom_bar(aes(y = totalADT), stat="identity") + 
+  labs(title="Plot of totalADT", 
+       x="State Code", y = "Total Average Daily Traffic")
+
+
+# The count of the bridges of each state.
+ggplot(d, aes(x=STATE_CODE_001)) + 
+  geom_bar(aes(y = count), stat="identity") + 
+  labs(title="Plot of Bridges Count", 
+       x="State Code", y = "Number of Bridges")
+```
+
+## Visualization with Leaflet(Without running here)
+I searched in the google map to clear the LAT and LONG format
+
+I tried some method to deal with them and I find out that (31061110 87341340) means (31.061110, -87341340)
+
+So I tidied the data as follows,
+
+```{r, eval=F}
+library(stringr)
+D1$code <- str_pad(D1$code, 5, pad = "0")
+D1%>% group_by(code) %>% dplyr::summarise(count = n())
+
+
+D1 %>% mutate(LAT = LAT_016/1000000, LONG = LONG_017/-1000000) %>%
+  select(STATE_CODE_001, code, LAT, LONG)-> d2
+
+
+#############################################################################
+# PLEASE DO NOT RUN THE FOLLOWING CODE ON YOUR COMPUTER UNLESS YOU WOULD LIKE TO
+# SPEND 20 MINUTED TO WAIT FOR ITS LOADING!!!!
+# IT IS VERY EASY TO CRASH!!!! SINCE THERE ARE TOO MAY DATA!!!
+# I ran it on my own Ubuntu Rstudio sever to do my own job when the map is drawing.
+###########################################################################
+# This is a leaflet interactive map.
+# The idea comes from:
+# https://www.kaggle.com/taddallas/d/kaggle/college-scorecard/interactive-map
+#
+# I tried a lot of time to modify the data but it keeps crashing until I 
+#     finally figure out the lantitude and lontitude data format.
+# In fact, it crashes so many time that I failed to hand in my final work beore 12 pm T_T
+# A sad story.........
+##########################################################################
+
+library(leaflet)
+
+## filter data
+d2<-filter(d2,
+           is.na(code)==FALSE &       ## Key measurements aren't missing
+             is.na(LAT)==FALSE &
+             is.na(LONG)==FALSE &
+             LAT>20 & LAT<50 &         ## Location is US 48
+             LONG>(-130) & LONG<(-60))
+
+
+m <- leaflet(d2) %>%
+  setView(-93.65, 42.0285, zoom = 4) %>%
+  addTiles() %>%
+  addMarkers(lat = ~LAT, lng = ~LONG,
+             options = popupOptions(closeButton = TRUE),
+             clusterOptions = markerClusterOptions())
+
+
+m
+```
+
+
+
