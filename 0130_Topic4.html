@@ -133,6 +133,8 @@ $(document).ready(function () {
 <div id="the-total-average-daily-traffic-of-the-bridges-in-each-state-the-number-of-the-bridges-of-each-state" class="section level2">
 <h2>The Total Average Daily Traffic of the bridges in each state &amp; The number of the bridges of each state</h2>
 <p>For the item recorded, we can see the <code>NBI Record Format</code> page. <a href="https://www.fhwa.dot.gov/bridge/nbi/format.cfm">NBI Record Format</a></p>
+<p>About the data</p>
+<p>Since the file is too large, I cannot upload it to the Github. Please save the data from the <code>downloadBridges.R</code> with <code>save(M, file = &quot;./data/tidyBridge.RData&quot;)</code> to save the data into the work directory.</p>
 <pre class="r"><code># Questions:
 # For the bridges data, what variables are you interested in? 
 # Select, filter, and plot. Do something different from my code! 
@@ -150,7 +152,12 @@ library(dplyr)</code></pre>
 ##     intersect, setdiff, setequal, union</code></pre>
 <pre class="r"><code># I store the variable `M` in `downloadBridges.R` into 
 # `tidyBridge.Rdata` file and load it here
-load(file = &quot;data/tidyBridge.RData&quot;)</code></pre>
+load(file = &quot;data/tidyBridge.RData&quot;)
+
+# # Since the file is too large, I cannot upload it to the Github.
+# # Please save the data from the `downloadBridges.R`
+# save(M, file = &quot;tidyBridge.RData&quot;)
+# # to save the data into the work directory.</code></pre>
 <p>The columns that I may interested in: * 6 Latitude * 17 Longitude * 27 Year Built * 29 Average Daily Traffic * 30 Year Of Average Daily Traffic</p>
 <p>Using <code>grep()</code> to search the column name and use <code>select</code> to pick them up.</p>
 <pre class="r"><code>colnames(M)[grep(&quot;006|017|027|029|030&quot;, colnames(M))]</code></pre>

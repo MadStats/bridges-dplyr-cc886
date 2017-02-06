@@ -21,6 +21,10 @@ knitr::opts_chunk$set(echo = TRUE)
 For the item recorded, we can see the `NBI Record Format` page.
 [NBI Record Format](https://www.fhwa.dot.gov/bridge/nbi/format.cfm)
 
+About the data
+
+Since the file is too large, I cannot upload it to the Github. Please save the data from the `downloadBridges.R` with `save(M, file = "./data/tidyBridge.RData")` to save the data into the work directory.
+
 ```{r}
 # Questions:
 # For the bridges data, what variables are you interested in? 
@@ -33,6 +37,11 @@ library(dplyr)
 # I store the variable `M` in `downloadBridges.R` into 
 # `tidyBridge.Rdata` file and load it here
 load(file = "data/tidyBridge.RData")
+
+# # Since the file is too large, I cannot upload it to the Github.
+# # Please save the data from the `downloadBridges.R`
+# save(M, file = "tidyBridge.RData")
+# # to save the data into the work directory.
 ```
 
 The columns that I may interested in:
