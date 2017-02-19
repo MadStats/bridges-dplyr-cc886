@@ -2,12 +2,16 @@
 # install.packages("plyr")
 # install.packages("choroplethr")
 # install.packages("dplyr")
+# install.packages("curl")
+# install.packages("readr")
 
 library(plyr)
 library(choroplethr)
 library(dplyr)
 library(readr)
 library(data.table)
+library(curl)
+library(readr)
 
 # I like downloading straight from url's.  
 # If I was planning to share this code in a long time, I would worry about stability of the accessibility (url/data/format) and maybe backup locally.
