@@ -11,7 +11,7 @@
 # setwd("/home/cc886/Sync/WiscTextbook/479/20170130_bridges_dplyr")
 library(ggplot2)
 library(dplyr)
-load(file = "data/tidyBridge.RData")
+load(file = "../data/tidyBridge.RData")
 
 ############ The columns that I may interested in ##################
 # colName <- colnames(M)
@@ -113,6 +113,3 @@ blingIcon <- makeIcon(
 # 
 # 
 # m
-
-
-

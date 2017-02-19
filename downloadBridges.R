@@ -1,7 +1,7 @@
-install.packages("ggplot2")
-install.packages("plyr")
-install.packages("choroplethr")
-install.packages("dplyr")
+# install.packages("ggplot2")
+# install.packages("plyr")
+# install.packages("choroplethr")
+# install.packages("dplyr")
 
 library(plyr)
 library(choroplethr)
